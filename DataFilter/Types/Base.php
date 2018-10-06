@@ -91,25 +91,6 @@
         return $this;
     }
 
-    /**
-     * removes all of elements of $Parametreler
-     * @return class $this
-     */
-    public function removeAll(){
-      $this->Parametreler = array();
-      return $this;
-    }
-
-    public function dump($obj=NULL){
-      echo "<pre>";
-      if($obj){
-        print_r($obj);
-      }else{
-        print_r($this->Parametreler);
-      }
-      echo "</pre>";
-    }
-
 
   }
 
