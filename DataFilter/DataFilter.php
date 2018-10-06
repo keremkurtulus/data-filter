@@ -15,7 +15,7 @@ class DataFilter extends Base
   }
 
   // $data bir elemanlı dizi gelirse ekleniyor, birden fazla elemanlı gelirse direkt eşitleniyor.
-  public function insertData($data = NULL){
+  public function add($data = NULL){
     if($data!==NULL){
       if(!$this->is_assoc($data) && is_array($data)){  //bu birden fazla elamanı olan bir array dir.
         $this->Parametreler=$data;
@@ -27,6 +27,18 @@ class DataFilter extends Base
       return $this;
     }
   }
+  
+  
+  
+    /**
+     * removes all of elements of $Parametreler
+     * @return class $this
+     */
+    public function dropAll(){
+      $this->Parametreler = array();
+      return $this;
+    }
+  
 }
 
 
