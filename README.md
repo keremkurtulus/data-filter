@@ -12,7 +12,8 @@ I create this Library for my projects. This Library will able to be useful for y
 If you want to use in your projects you can copy Library files in your project folder. You should load class file manully.
 ```
 <?php 
-require '../class.datafilter.php';
+require_once('DataFilter/index.php');
+$df = new DataFilter;
 ```
 
 ## Definition & Recommendation
@@ -32,14 +33,19 @@ The structure;
    3. Calculator()
       - ->addition()
       - ->count()
+      
+ Common Functions;
+   1. orderBy()
+   2. get()
 
-The functions can be integrated with each other. Because of that you should know which function should be given priority.  
-For example, If you will use **Filter()** after **Formatter()** there will be able to some problems caused your array values type. When you use sub function of Filter() like Filter()->bigger("Balance") you should check your values is comparable. For example, this function 'Formatter()->money()' converts numeric value to text value like that 102.45 -> 102,45  As you know the comma is not numeric. If you use formatter **Formatter()->money("Balance")** before this **Filter()->bigger("Balance")** , probably you will encounter wrong result because faulty order of functions you used. In this situation, you tried to filter array by Balance column values as text. (exm. 102,45>100,35 that's wrong). You should use Filter() before Formatter().
+The functions can be integrated with each other. Because of that you should know which function should use first.  
+For example, If you will use **Filter()** after **Formatter()** there will be able to some problems caused your array values type. Before you use sub function of Filter() like Filter()->bigger("Balance") , you should check your values is comparable. For example, this function 'Formatter()->money()' converts numeric value to text value like that 102.45 -> 102,45  As you know the comma is not numeric. In this situation probably you will encounter wrong result because faulty order of functions you used. To get the right results, you must follow these order Filter()->bigger("expColumnName")->Formatter()->money("expColumnName")
 
 ## Example 1
 ```
-  $df = new KK/DataFilter;  
-  $df->insertData(
+...
+
+  $df->add(
   [
     [
       ID=>1,
@@ -55,10 +61,11 @@ For example, If you will use **Filter()** after **Formatter()** there will be ab
     ]
   ]);
 
-  $df->Filter()->equal(656.12,"Balance");    //  <-- filter array by Balance columns equal 656.12
-  $df->Formatter()->money("Balance");        //  <-- change format values of each Balance keys 
-  $df->Editor()->edit("$ %s","Balance");    //  <-- edit each value has Balance key (%s returns existed value)
-  $myArr=$df->get();    //  <-- returns result array
+  $myArr = $df->Filter()->equal(656.12,"Balance")    //  <-- filter array by Balance columns equal 656.12
+              ->Formatter()->money("Balance")        //  <-- change format values of each Balance keys 
+              ->Editor()->edit("$ %s","Balance")     //  <-- edit each value has Balance key (%s returns existed value)
+              ->get();                               //  <-- returns filtered array
+       
   print_r($myArr);
 
 ```
@@ -75,9 +82,10 @@ Array(
 ```
 ## Example 2
 ```
-  $df = new KK/DataFilter;
+  ...
+  
   for ($i=195; $i < 205; $i++) {
-    $df->insertData($i);    // <-- the $i is able to be array or just element
+    $df->add($i);    // <-- parameter can accept just element or array
   }
   print_r($df->get()); 
   
@@ -112,9 +120,6 @@ Array
 ## Example 3
 ```
    ...
-$df = new KK/DataFilter;
-$df->insertData($myArray);
-print_r($df->get()); // actually prints $myArray
 
 $df->Filter()->bigger("2018-01-01 00:00:00","Date")->smaller("2018-02-30 24:00:00","Date")->orderBy("DESC","Date")
    ->Formatter()->money("TotalAmount") // <-- money() function converts double to string like 102.45 -> 102,45 
@@ -124,49 +129,6 @@ print_r($df->get());  // prints refined array
 ```
 Output:
 ```
-Array
-(
-    [0] => Array
-        (
-            [OrderID] => 99
-            [TotalAmount] => 18.85
-            [Date] => 2018-02-30 09:07:00
-            [Status] => 2
-        )
-
-    [1] => Array
-        (
-            [OrderID] => 100
-            [TotalAmount] => 156
-            [Date] => 2018-03-21 18:09:00
-            [Status] => 3
-        )
-
-    [2] => Array
-        (
-            [OrderID] => 97
-            [TotalAmount] => 591.77
-            [Date] => 2018-01-12 00:01:00
-            [Status] => 4
-        )
-
-    [3] => Array
-        (
-            [OrderID] => 101
-            [TotalAmount] => 168.2
-            [Date] => 2018-03-24 12:01:00
-            [Status] => 2
-        )
-
-    [4] => Array
-        (
-            [OrderID] => 98
-            [TotalAmount] => 358
-            [Date] => 2018-01-13 10:08:00
-            [Status] => 4
-        )
-
-)
 Array
 (
     [0] => Array
