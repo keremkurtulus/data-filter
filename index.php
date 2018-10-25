@@ -7,20 +7,19 @@ require_once('DataFilter/index.php');
 
 $df = new DataFilter;
 
-$df->insertData([
+$df->add([
   1,8,3,6,2,56,43,2,5,3,4,3,4,3,4,343
 ]);
 
 
-          $df->Filter(1)
+          $df->Filter(true)
                 ->bigger(5)->orderBy("DESC");
 
-          $df->Formatter(1)
+          $df->Formatter(true)
                 ->money()
-             ->Editor(1)
+             ->Editor(true)
                 ->edit("₺%s");
 
-$df->removeAll();
 $myArr = $df->get();
 
 
